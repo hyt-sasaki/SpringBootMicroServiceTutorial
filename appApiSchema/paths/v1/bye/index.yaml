@@ -1,0 +1,10 @@
+get:
+  tags:
+    - bye
+  responses:
+    200:
+      description: bye
+      content:
+        application/json:
+          schema:
+            $ref: '../../../components/schemas/ByeDTO.yaml'

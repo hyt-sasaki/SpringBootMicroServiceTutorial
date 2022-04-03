@@ -1,0 +1,49 @@
+plugins {
+    id 'myproject.java-conventions'
+    id 'application'
+    id 'org.openapi.generator' version '5.3.0'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'io.swagger:swagger-annotations:1.6.5'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation project(':greeting-usecase')
+    implementation project(':greeting-infra')
+}
+
+openApiGenerate {
+    def basePackage = "${project.group}.app.generated"
+    generatorName = 'spring'
+    inputSpec = "${rootDir}/appApiSchema/openapi.yaml"
+    outputDir = "${buildDir}/generated"
+    apiPackage = "${basePackage}.api"
+    modelPackage = "${basePackage}.model"
+    generateApiDocumentation = true
+    generateModelDocumentation = true
+    configOptions = [
+            interfaceOnly: "true",
+            useTags: "true"
+    ]
+}
+openApiValidate {
+    inputSpec = "${rootDir}/appApiSchema/openapi.yaml"
+    recommend = true
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'build/generated/src/main/java']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java', 'build/generated/src/main/java']
+        }
+    }
+}
+
+compileJava.dependsOn tasks.openApiGenerate
