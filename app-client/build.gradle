@@ -1,0 +1,11 @@
+plugins {
+    id "com.github.node-gradle.node" version "3.2.1"
+}
+
+node {
+    download = true
+    version = '17.8.0'
+    yarnVersion = '1.22.18'
+    nodeProjectDir = file("${project.projectDir}")
+    yarnWorkDir = file("${project.projectDir}/.gradle/yarn")
+}
