@@ -2,8 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.6.6' apply false
 }
 
-subprojects {
-    if (project.name === 'app-client') return
+configure(subprojects.findAll {!it.name.endsWith('client')}) {
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'org.springframework.boot'
