@@ -1,24 +1,12 @@
 plugins {
-    id 'com.github.node-gradle.node' version '3.2.1'
+    id 'org.openapi.generator' version '5.3.0'
 }
 
-node {
-    download = true
-    version = '17.8.0'
-    yarnVersion = '1.22.18'
-    nodeProjectDir = project.projectDir
-    yarnWorkDir = file("${project.projectDir}/.gradle/yarn")
-}
-
-tasks.register('start', YarnTask) {
-    group = 'application'
-    args = ['start']
-}
-tasks.register('build', YarnTask) {
-    group = 'build'
-    args = ['build']
-}
-tasks.register('test', YarnTask) {
-    group = 'test'
-    args = ['test']
+openApiGenerate {
+    generatorName = 'typescript-axios'
+    inputSpec = "${rootDir}/appApiSchema/openapi.yaml"
+    outputDir = "${projectDir}/src/generated"
+    configOptions = [
+            suportsES6: "true"
+    ]
 }

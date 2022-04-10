@@ -2,6 +2,9 @@ openapi: 3.0.0
 info:
   title: app
   version: 1.0
+servers:
+  - url: http://localhost:8080
+    description: spring boot micro service tutorial
 tags:
   - name: hello
   - name: bye
