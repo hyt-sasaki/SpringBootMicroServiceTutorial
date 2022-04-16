@@ -1,9 +1,11 @@
 plugins {
     id 'org.springframework.boot' version '2.6.6' apply false
 }
+ext['jooq.version'] = '3.16.5'
 
 def notJavaProjects = [
         'flyway',
+        'jooq',
         'app-client'
 ]
 configure(subprojects.findAll {

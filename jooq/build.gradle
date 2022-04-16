@@ -1,0 +1,54 @@
+plugins {
+    id 'nu.studer.jooq' version '7.1.1'
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+def jooqVersion = '3.16.5'
+
+dependencies {
+    jooqGenerator 'mysql:mysql-connector-java:8.0.28'
+    api "org.jooq:jooq:${jooqVersion}"
+}
+
+
+jooq {
+    version = jooqVersion
+    configurations {
+        main {
+            generateSchemaSourceOnCompilation = false
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc {
+                    driver = 'com.mysql.cj.jdbc.Driver'
+                    url = System.getenv('MYSQL_URL')
+                    user = System.getenv('MYSQL_USER')
+                    password = System.getenv('MYSQL_PASSWORD')
+                }
+                generator {
+                    target {
+                        packageName = 'com.example.generated.jooq'
+                        directory = "${buildDir}/generated/src/main/java"
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.generateJooq.configure {
+    allInputsDeclared = true
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["${buildDir}/generated/src/main/java"]
+        }
+    }
+}
+
+compileJava.dependsOn tasks.generateJooq
