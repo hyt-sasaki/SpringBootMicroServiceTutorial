@@ -1,12 +1,16 @@
+import useSWR from "swr";
 import { HelloApi, HelloDTO } from "../generated/api";
 
-let data: HelloDTO | undefined;
+const initialValue: HelloDTO = {
+  message: "",
+};
 
 export function useHello() {
-  if (data === undefined) {
-    throw new HelloApi().v1HelloGet().then((res) => {
-      data = res.data;
-    });
-  }
-  return data;
+  const key = "v1GetHello";
+  const fetcher = (_: string) => {
+    return new HelloApi().v1HelloGet().then((res) => res.data);
+  };
+  const { data } = useSWR(key, fetcher, { suspense: true });
+
+  return { data: data ?? initialValue };
 }

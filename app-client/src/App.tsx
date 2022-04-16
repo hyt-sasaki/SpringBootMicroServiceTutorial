@@ -2,6 +2,7 @@ import { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { HelloPage } from "./components/hello/HelloPage";
+import { DefferedPage } from "./components/deffered/DefferedPage";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -19,6 +20,7 @@ function App() {
         <div>
           <HelloPage />
         </div>
+        <DefferedPage />
       </header>
     </div>
   );

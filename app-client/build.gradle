@@ -10,3 +10,34 @@ openApiGenerate {
             suportsES6: "true"
     ]
 }
+
+tasks.register('run', Exec) {
+    group 'yarn'
+    dependsOn 'openApiGenerate'
+
+    workingDir projectDir
+    commandLine 'yarn', 'dev'
+}
+
+tasks.register('checkType', Exec) {
+    group 'yarn'
+    dependsOn 'openApiGenerate'
+
+    inputs.dir 'src'
+    inputs.files 'tsconfig.json'
+
+    workingDir projectDir
+    commandLine 'tsc'
+}
+
+tasks.register('build', Exec) {
+    group 'yarn'
+    dependsOn 'openApiGenerate', 'checkType'
+
+    inputs.dir 'src'
+    it.inputs.files 'index.html', 'package.json', 'tsconfig.json', 'vite.config.ts'
+    outputs.dir 'dist'
+
+    workingDir projectDir
+    commandLine 'yarn', 'build'
+}
