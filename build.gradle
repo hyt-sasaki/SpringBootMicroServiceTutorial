@@ -1,36 +1,3 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
-plugins {
-    id 'org.springframework.boot' version '2.6.6' apply false
-}
-ext['jooq.version'] = '3.16.5'
-
-def notJavaProjects = [
-        'flyway',
-        'jooq',
-        'app-client'
-]
-configure(subprojects.findAll {
-    !notJavaProjects.contains(it.name)
-}) {
-    apply plugin: 'java'
-    apply plugin: 'jacoco'
-    apply plugin: 'io.spring.dependency-management'
-    dependencyManagement {
-        imports {
-            mavenBom SpringBootPlugin.BOM_COORDINATES
-        }
-    }
-
-    jacoco {
-        toolVersion = '0.8.7'
-    }
-
-    jacocoTestReport {
-        dependsOn test
-    }
-}
-
 tasks.register('mergeTestReports', TestReport) {
     destinationDir = file("${buildDir}/reports/allTests")
     reportOn subprojects

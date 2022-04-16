@@ -2,8 +2,10 @@ plugins {
     id 'myproject.java-conventions'
     id 'application'
     id 'org.openapi.generator' version '5.3.0'
+    id 'org.springframework.boot' version '2.6.6'
 }
-apply plugin: 'org.springframework.boot'
+ext['jooq.version'] = '3.16.5'
+//apply plugin: 'org.springframework.boot'
 
 bootRun {
     systemProperty 'org.jooq.no-logo', 'true'
