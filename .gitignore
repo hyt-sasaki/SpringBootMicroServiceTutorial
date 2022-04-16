@@ -13,3 +13,5 @@
 .classpath
 
 .idea
+
+**/build/
