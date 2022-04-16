@@ -1,0 +1,6 @@
+CREATE TABLE greetings (
+    id bigint NOT NULL PRIMARY KEY,
+    message VARCHAR(255) NOT NULL,
+    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

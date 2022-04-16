@@ -1,0 +1,20 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'mysql:mysql-connector-java:8.0.28'
+        classpath 'org.flywaydb:flyway-mysql:8.5.8'
+    }
+}
+
+plugins {
+    id 'org.flywaydb.flyway' version '8.5.8'
+}
+
+flyway {
+    url = System.getenv('MYSQL_URL')
+    user = System.getenv('MYSQL_USER')
+    password = System.getenv('MYSQL_PASSWORD')
+    locations = ['filesystem:./migration/sample/v1']
+}
