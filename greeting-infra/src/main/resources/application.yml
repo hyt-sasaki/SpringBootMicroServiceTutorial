@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:13306/sample}
+    username: ${MYSQL_USER:docker}
+    password: ${MYSQL_PASSWORD:docker}
+  jooq:
+    sql-dialect: mysql
