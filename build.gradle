@@ -1,10 +1,11 @@
 tasks.register('mergeTestReports', TestReport) {
-    destinationDir = file("${buildDir}/reports/allTests")
-    reportOn subprojects
-            .findAll({
-                file("${it.buildDir}/reports/tests").exists()
-            })
-            .collect({
-                it.tasks.withType(Test)
-            })
+    destinationDirectory = layout.buildDirectory.dir('reports/allTests')
+    testResults.from subprojects
+        .findAll {
+            file("${it.buildDir}/reports/tests").exists()
+        }
+        .collect {
+            it.tasks.withType(Test)*.binaryResultsDirectory
+        }
+        .flatten()
 }
