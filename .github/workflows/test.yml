@@ -3,6 +3,9 @@ name: hello
 on:
   pull_request:
 
+env:
+  MYSQL_OPTIONS: allowPublicKeyRetrieval=true&useSSL=false
+
 jobs:
   build:
     runs-on: ubuntu-20.04
