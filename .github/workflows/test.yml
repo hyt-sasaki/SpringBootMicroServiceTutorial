@@ -1,0 +1,31 @@
+name: hello
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare test containers
+        run: docker compose up -d
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 16
+      - name: test
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: flywayMigrate test mergeTestReports
+      - name: merge test reports
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: mergeTestReports
+      - name: upload merged test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: merged_reports
+          path: build/reports/allTests
+          retention-days: 3
