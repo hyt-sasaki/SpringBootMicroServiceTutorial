@@ -1,3 +1,11 @@
+ext {
+    dbSettings = [
+            url : System.getenv('MYSQL_URL') ?: 'jdbc:mysql://127.0.0.1:13306/sample?useSSL=false',
+            user : System.getenv('MYSQL_USER') ?: 'docker',
+            password : System.getenv('MYSQL_PASSWORD') ?: 'docker',
+    ]
+}
+
 tasks.register('mergeTestReports', TestReport) {
     group = 'report'
     destinationDirectory = layout.buildDirectory.dir('reports/allTests')

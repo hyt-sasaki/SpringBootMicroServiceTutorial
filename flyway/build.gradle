@@ -13,8 +13,8 @@ plugins {
 }
 
 flyway {
-    url = System.getenv('MYSQL_URL')
-    user = System.getenv('MYSQL_USER')
-    password = System.getenv('MYSQL_PASSWORD')
+    url = rootProject.ext.dbSettings.url
+    user = rootProject.ext.dbSettings.user
+    password = rootProject.ext.dbSettings.password
     locations = ['filesystem:./migration/sample/v1']
 }

@@ -24,9 +24,9 @@ jooq {
                 logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc {
                     driver = 'com.mysql.cj.jdbc.Driver'
-                    url = System.getenv('MYSQL_URL')
-                    user = System.getenv('MYSQL_USER')
-                    password = System.getenv('MYSQL_PASSWORD')
+                    url = rootProject.ext.dbSettings.url
+                    user = rootProject.ext.dbSettings.user
+                    password = rootProject.ext.dbSettings.password
                 }
                 generator {
                     target {
