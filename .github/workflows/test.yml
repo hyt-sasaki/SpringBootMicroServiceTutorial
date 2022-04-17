@@ -18,7 +18,7 @@ jobs:
       - name: test
         uses: gradle/gradle-build-action@v2
         env:
-          MYSQL_OPTIONS: allowPublicKeyRetrieval=true&useSSL=false
+          MYSQL_URL: jdbc:mysql://127.0.0.1:13306/sample?allowPublicKeyRetrieval=true&useSSL=false
         with:
           arguments: flywayMigrate test mergeTestReports
       - name: merge test reports
