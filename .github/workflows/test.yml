@@ -15,16 +15,16 @@ jobs:
         with:
           distribution: temurin
           java-version: 16
-      - name: test
+      - name: flyway
         uses: gradle/gradle-build-action@v2
         env:
           MYSQL_URL: jdbc:mysql://127.0.0.1:13306/sample?allowPublicKeyRetrieval=true&useSSL=false
         with:
-          arguments: flywayMigrate test mergeTestReports
+          arguments: flywayMigrate test -Dorg.gradle.unsafe.configuration-cache=true
       - name: merge test reports
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: mergeTestReports
+          arguments: mergeTestReports -Dorg.gradle.unsafe.configuration-cache=true
       - name: upload merged test report
         uses: actions/upload-artifact@v3
         with:
