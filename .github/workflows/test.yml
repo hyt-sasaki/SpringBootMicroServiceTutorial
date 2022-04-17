@@ -20,11 +20,15 @@ jobs:
         env:
           MYSQL_URL: jdbc:mysql://127.0.0.1:13306/sample?allowPublicKeyRetrieval=true&useSSL=false
         with:
-          arguments: flywayMigrate test -Dorg.gradle.unsafe.configuration-cache=true
+          arguments: flywayMigrate
+      - name: test
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test
       - name: merge test reports
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: mergeTestReports -Dorg.gradle.unsafe.configuration-cache=true
+          arguments: mergeTestReports
       - name: upload merged test report
         uses: actions/upload-artifact@v3
         with:
