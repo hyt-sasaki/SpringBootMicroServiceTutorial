@@ -1,4 +1,5 @@
 tasks.register('mergeTestReports', TestReport) {
+    group = 'report'
     destinationDirectory = layout.buildDirectory.dir('reports/allTests')
     testResults.from subprojects
         .findAll {
