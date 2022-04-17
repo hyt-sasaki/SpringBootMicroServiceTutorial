@@ -17,6 +17,7 @@ dependencies {
     implementation 'io.swagger:swagger-annotations:1.6.5'
     implementation 'org.openapitools:jackson-databind-nullable:0.2.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'mysql:mysql-connector-java'
     implementation project(':greeting-usecase')
     implementation project(':greeting-infra')
 }
