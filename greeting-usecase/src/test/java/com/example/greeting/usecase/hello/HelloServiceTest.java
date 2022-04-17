@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -23,8 +25,8 @@ class HelloServiceTest {
     void fetchMessage() {
         // given
         val expectedMessage = "hello from HelloService";
-        when(helloRepository.fetch())
-                .thenReturn(HelloEntity.create(expectedMessage));
+        when(helloRepository.findOneById(1L))
+                .thenReturn(Optional.of(HelloEntity.fromRepository(1L, expectedMessage)));
         // when
         val helloDto = helloService.fetchMessage();
         // then

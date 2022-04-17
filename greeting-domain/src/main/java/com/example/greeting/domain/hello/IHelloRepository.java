@@ -1,5 +1,7 @@
 package com.example.greeting.domain.hello;
 
+import java.util.Optional;
+
 public interface IHelloRepository {
-    HelloEntity fetch();
+    Optional<HelloEntity> findOneById(Long id);
 }

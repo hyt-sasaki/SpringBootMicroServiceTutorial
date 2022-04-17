@@ -14,7 +14,8 @@ class HelloService implements IHelloService {
 
     @Override
     public HelloDTO fetchMessage() {
-        val entity = helloRepository.fetch();
+        val entity = helloRepository.findOneById(1L)
+                .orElseThrow(() -> new RuntimeException("Not Found"));
         return HelloDTO.builder()
                 .message(entity.getMessage()).build();
     }
