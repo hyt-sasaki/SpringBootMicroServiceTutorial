@@ -31,7 +31,7 @@ jooq {
                 generator {
                     target {
                         packageName = 'com.example.generated.jooq'
-                        directory = "${buildDir}/generated/src/main/java"
+                        directory = "${projectDir}/src/generated/java"
                     }
                 }
             }
@@ -46,9 +46,7 @@ tasks.generateJooq.configure {
 sourceSets {
     main {
         java {
-            srcDirs = ["${buildDir}/generated/src/main/java"]
+            srcDirs = ["${projectDir}/src/generated/java"]
         }
     }
 }
-
-compileJava.dependsOn tasks.generateJooq
