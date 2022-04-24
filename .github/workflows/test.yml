@@ -15,6 +15,10 @@ jobs:
         with:
           distribution: temurin
           java-version: 16
+      - uses: cue-lang/setup-cue@v1.0.0-alpha.2
+        with:
+          version: latest
+        id: install
       - name: flyway
         uses: gradle/gradle-build-action@v2
         env:
