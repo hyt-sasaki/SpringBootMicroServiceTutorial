@@ -1,0 +1,37 @@
+name: hello
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare test containers
+        run: docker compose up -d
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 16
+      - name: flyway
+        uses: gradle/gradle-build-action@v2
+        env:
+          MYSQL_URL: jdbc:mysql://127.0.0.1:13306/sample?allowPublicKeyRetrieval=true&useSSL=false
+        with:
+          arguments: flywayMigrate
+      - name: test
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test
+      - name: merge test reports
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: mergeTestReports
+      - name: upload merged test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: merged_reports
+          path: build/reports/allTests
+          retention-days: 3

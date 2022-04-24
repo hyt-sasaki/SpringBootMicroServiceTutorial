@@ -10,6 +10,12 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(16)
+    }
+}
+
 dependencies {
     implementation platform('org.springframework.boot:spring-boot-dependencies:2.6.6')
     compileOnly 'org.projectlombok:lombok:1.18.22'
