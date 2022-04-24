@@ -24,7 +24,7 @@ dependencies {
 openApiGenerate {
     def basePackage = "${project.group}.app.generated"
     generatorName = 'spring'
-    inputSpec = "${rootDir}/appApiSchema/openapi.yaml"
+    inputSpec = "${rootDir}/appApiSchema/build/openapi.yaml"
     outputDir = "${buildDir}/generated"
     apiPackage = "${basePackage}.api"
     modelPackage = "${basePackage}.model"
@@ -36,8 +36,15 @@ openApiGenerate {
     ]
 }
 openApiValidate {
-    inputSpec = "${rootDir}/appApiSchema/openapi.yaml"
+    inputSpec = "${rootDir}/appApiSchema/build/openapi.yaml"
     recommend = true
+}
+tasks.register('generateYamlFromCue', Exec) {
+    workingDir "${rootDir}/appApiSchema"
+    commandLine 'cue', 'export', '.', '-o', 'build/openapi.yaml'
+    doFirst {
+        mkdir "${workingDir}/build"
+    }
 }
 
 sourceSets {
@@ -54,3 +61,9 @@ sourceSets {
 }
 
 compileJava.dependsOn tasks.openApiGenerate
+// tasks.openApiGenerate.depndsOn 'generateYamlFromCue'
+// tasks.openApiValidate.depndsOn 'generateYamlFromCue'
+
+tasks.named('openApiGenerate') {
+    dependsOn tasks.generateYamlFromCue
+}
