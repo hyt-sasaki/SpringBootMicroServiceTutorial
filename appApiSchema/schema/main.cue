@@ -23,6 +23,12 @@ package schema
 #TagName: string
 #Path: [#Method]: {
 	tags: [...#TagName]
+	parameters?: [...{
+		name:         string
+		in:           "path" | "query" | "header" | "cookie"
+		description?: string
+		required:     bool | *true
+	}]
 	responses: {
 		[#Status]: {
 			description: string
