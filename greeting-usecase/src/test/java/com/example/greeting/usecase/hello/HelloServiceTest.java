@@ -28,7 +28,7 @@ class HelloServiceTest {
         when(helloRepository.findOneById(1L))
                 .thenReturn(Optional.of(HelloEntity.fromRepository(1L, expectedMessage)));
         // when
-        val helloDto = helloService.fetchMessage();
+        val helloDto = helloService.fetchMessage(1);
         // then
         assertThat(helloDto.getMessage()).isEqualTo(expectedMessage);
     }

@@ -13,8 +13,8 @@ class HelloService implements IHelloService {
     private final IHelloRepository helloRepository;
 
     @Override
-    public HelloDTO fetchMessage() {
-        val entity = helloRepository.findOneById(1L)
+    public HelloDTO fetchMessage(Integer id) {
+        val entity = helloRepository.findOneById(Long.valueOf(id))
                 .orElseThrow(() -> new RuntimeException("Not Found"));
         return HelloDTO.builder()
                 .message(entity.getMessage()).build();
