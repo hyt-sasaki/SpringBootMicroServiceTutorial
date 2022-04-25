@@ -6,9 +6,9 @@ const initialValue: HelloDTO = {
 };
 
 export function useHello() {
-  const key = "v1GetHello";
+  const key = "v1HelloIdGet";
   const fetcher = (_: string) => {
-    return new HelloApi().v1HelloGet().then((res) => res.data);
+    return new HelloApi().v1HelloIdGet(1).then((res) => res.data);
   };
   const { data } = useSWR(key, fetcher, { suspense: true });
 
