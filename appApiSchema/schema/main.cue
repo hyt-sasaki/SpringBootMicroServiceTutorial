@@ -28,6 +28,7 @@ package schema
 		in:           "path" | "query" | "header" | "cookie"
 		description?: string
 		required:     bool | *true
+		schema: type: #Type
 	}]
 	responses: {
 		[#Status]: {

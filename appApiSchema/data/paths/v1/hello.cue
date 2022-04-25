@@ -11,6 +11,7 @@ let dto = "#/components/schemas/\(strings.ToTitle(tag))DTO"
 	parameters: [{
 		name: "id"
 		in:   "path"
+		schema: type: "integer"
 	}]
 	responses: "200": {
 		description: "get \(tag) message"

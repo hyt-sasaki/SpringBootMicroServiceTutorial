@@ -41,3 +41,10 @@ tasks.register('build', Exec) {
     workingDir projectDir
     commandLine 'yarn', 'build'
 }
+
+tasks.named('openApiGenerate') {
+    dependsOn rootProject.tasks.generateYamlFromCue
+}
+tasks.named('openApiValidate') {
+    dependsOn rootProject.tasks.generateYamlFromCue
+}
