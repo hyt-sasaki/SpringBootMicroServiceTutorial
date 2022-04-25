@@ -16,7 +16,7 @@ public class HelloController implements HelloApi {
 
     @Override
     public ResponseEntity<HelloDTO> v1HelloIdGet(Integer id) {
-        return ResponseEntity.ok(convertDto(helloService.fetchMessage()));
+        return ResponseEntity.ok(convertDto(helloService.fetchMessage(id)));
     }
 
     private HelloDTO convertDto(com.example.greeting.usecase.hello.HelloDTO dto) {
