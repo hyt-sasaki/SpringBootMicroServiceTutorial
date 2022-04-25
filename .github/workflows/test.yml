@@ -28,7 +28,7 @@ jobs:
       - name: test
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: test
+          arguments: --parallel ':app:test' ':greeting-usecase:test'
       - name: merge test reports
         uses: gradle/gradle-build-action@v2
         with:
