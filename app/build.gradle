@@ -39,16 +39,6 @@ openApiValidate {
     inputSpec = "${rootDir}/appApiSchema/build/openapi.yaml"
     recommend = true
 }
-tasks.register('generateYamlFromCue', Exec) {
-    def cueDir = "${rootDir}/appApiSchema"
-    it.inputs.dir(cueDir)
-    it.outputs.file("${cueDir}/build/openapi.yaml")
-    workingDir cueDir
-    commandLine 'cue', 'export', '.', '-o', 'build/openapi.yaml', '-f'
-    doFirst {
-        mkdir "${cueDir}/build"
-    }
-}
 
 sourceSets {
     main {
@@ -66,8 +56,8 @@ sourceSets {
 compileJava.dependsOn tasks.openApiGenerate
 
 tasks.named('openApiGenerate') {
-    dependsOn tasks.generateYamlFromCue
+    dependsOn rootProject.tasks.generateYamlFromCue
 }
 tasks.named('openApiValidate') {
-    dependsOn tasks.generateYamlFromCue
+    dependsOn rootProject.tasks.generateYamlFromCue
 }

@@ -4,7 +4,7 @@ plugins {
 
 openApiGenerate {
     generatorName = 'typescript-axios'
-    inputSpec = "${rootDir}/appApiSchema/openapi.yaml"
+    inputSpec = "${rootDir}/appApiSchema/build/openapi.yaml"
     outputDir = "${projectDir}/src/generated"
     configOptions = [
             suportsES6: "true"
