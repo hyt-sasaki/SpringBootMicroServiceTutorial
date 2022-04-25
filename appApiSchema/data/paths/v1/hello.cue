@@ -2,15 +2,18 @@ package paths
 
 import "strings"
 
-let name = "hello"
-let uri = "/v1/\(name)"
-let dto = "#/components/schemas/\(strings.ToTitle(name))DTO"
+let tag = "hello"
+let baseUri = "/v1/\(tag)"
+let dto = "#/components/schemas/\(strings.ToTitle(tag))DTO"
 
-#Paths: (uri): [string]: tags: [name]
-
-#Paths: (uri): get: {
+#Paths: "\(baseUri)/{id}": [string]: tags: [tag]
+#Paths: "\(baseUri)/{id}": get: {
+	parameters: [{
+		name: "id"
+		in:   "path"
+	}]
 	responses: "200": {
-		description: "get \(name) message"
+		description: "get \(tag) message"
 		content: "application/json": schema: $ref: dto
 	}
 }
