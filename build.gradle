@@ -18,3 +18,14 @@ tasks.register('mergeTestReports', TestReport) {
         }
         .flatten()
 }
+
+tasks.register('generateYamlFromCue', Exec) {
+    def cueDir = "${rootDir}/appApiSchema"
+    it.inputs.dir(cueDir)
+    it.outputs.file("${cueDir}/build/openapi.yaml")
+    workingDir cueDir
+    commandLine 'cue', 'export', '.', '-o', 'build/openapi.yaml', '-f'
+    doFirst {
+        mkdir "${cueDir}/build"
+    }
+}
