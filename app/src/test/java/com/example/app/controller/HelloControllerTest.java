@@ -28,13 +28,13 @@ class HelloControllerTest {
 
     @SneakyThrows
     @Test
-    void v1HelloGet() {
+    void v1HelloIdGet() {
         // given
-        when(helloService.fetchMessage())
+        when(helloService.fetchMessage(1))
                 .thenReturn(HelloDTO.builder()
                         .message("hello").build());
         // when
-        val resultActions = mockMvc.perform(get("/v1/hello"));
+        val resultActions = mockMvc.perform(get("/v1/hello/1"));
         // then
         resultActions
                 .andExpect(status().isOk())
