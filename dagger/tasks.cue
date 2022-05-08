@@ -40,6 +40,7 @@ import (
         workdir: "/src"
         mounts: _gardleCacheMount
         "env": env
+        "always": always
     }
 
     _image: #JavaImage & {
@@ -51,6 +52,7 @@ import (
     export: _build.export
     env: [string]: string
     success: _build.success
+    always?: bool | *true
 }
 
 #CueImage: {

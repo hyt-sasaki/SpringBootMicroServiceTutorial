@@ -40,6 +40,7 @@ dagger.#Plan & {
             gradle: #GradleRun & {
                 src: _input.output
                 arguments: [":app:bootJar"]
+                always: false
             }
             contents: core.#Subdir & {
                 input: gradle.output.rootfs
@@ -65,9 +66,7 @@ dagger.#Plan & {
                 mysql: core.#Start & {
                     input: _mysql.output.rootfs
                     env: _env
-                    args: [
-                        "docker-entrypoint.sh", "mysqld"
-                    ]
+                    args: ["/entrypoint.sh", "mysqld"]
                 }
                 terminate: core.#Stop & {
                     _deps: gradle.success
@@ -77,6 +76,7 @@ dagger.#Plan & {
             gradle: #GradleRun & {
                 src: _input.output
                 arguments: [":greeting-usecase:test", ":app:test"]
+                always: true
                 env: _env
             }
 		}
