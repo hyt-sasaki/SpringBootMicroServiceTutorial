@@ -54,10 +54,3 @@ sourceSets {
 }
 
 compileJava.dependsOn tasks.openApiGenerate
-
-tasks.named('openApiGenerate') {
-    dependsOn rootProject.tasks.generateYamlFromCue
-}
-tasks.named('openApiValidate') {
-    dependsOn rootProject.tasks.generateYamlFromCue
-}
