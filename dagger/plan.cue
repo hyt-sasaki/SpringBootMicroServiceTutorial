@@ -3,9 +3,6 @@ package main
 import (
 	"dagger.io/dagger"
 	"dagger.io/dagger/core"
-	"universe.dagger.io/alpine"
-	"universe.dagger.io/bash"
-	"universe.dagger.io/docker"
 )
 
 dagger.#Plan & {
@@ -16,37 +13,30 @@ dagger.#Plan & {
 			id: ".gradle"
 		}
 	}
-	client: filesystem: "..": read: contents: dagger.#FS
-	actions: {
-		deps: docker.#Build & {
-			steps: [
-				alpine.#Build & {
-					packages: {
-						gradle: {}
-						bash: {}
-					}
-				},
-				docker.#Copy & {
-					contents: client.filesystem."..".read.contents
-					dest:     "/root/project"
-				},
-			]
+	client: filesystem: {
+        "..": read: contents: dagger.#FS
+        "./_build": write: contents: actions.build.contents.output
+    }
+    actions: {
+        openapi: {
+            cue: #CueRun & {
+                src: client.filesystem."..".read.contents
+                script: "mkdir -p /src/appApiSchema/build; cue export -o /src/appApiSchema/build/openapi.yaml"
+            }
+        }
+		build: {
+            _input: core.#Subdir & {
+                input: openapi.cue.output.rootfs
+                path: "/src"
+            }
+            gradle: #GradleRun & {
+                src: _input.output
+                arguments: [":app:bootJar"]
+            }
+            contents: core.#Subdir & {
+                input: gradle.output.rootfs
+                path: "/src/app/build"
+            }
 		}
-
-		showTasks: bash.#Run & {
-			input: deps.output
-			script: contents: "echo $HOME && ls -la $HOME/.gradle && ./gradlew tasks && ls -la $HOME"
-			workdir: "/root/project"
-			mounts: _gardleCacheMount
-		}
-
-		check: bash.#Run & {
-			input: showTasks.output
-			script: contents: "echo $HOME && ls -la $HOME/.gradle && ./gradlew --help"
-			workdir: "/root/project"
-			mounts: _gardleCacheMount
-			always: true
-		}
-
 	}
 }
