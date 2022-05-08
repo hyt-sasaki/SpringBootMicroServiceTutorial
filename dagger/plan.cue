@@ -63,15 +63,15 @@ dagger.#Plan & {
                 _mysql: docker.#Pull & {
                     source: "mysql:8.0.28"
                 }
-                mysql: core.#Start & {
+                mysql: core.#Exec & {
                     input: _mysql.output.rootfs
                     env: _env
-                    args: ["/entrypoint.sh", "mysqld"]
+                    args: ["sh", "-c", "hostname -i; /entrypoint.sh mysqld"]
                 }
-                terminate: core.#Stop & {
-                    _deps: gradle.success
-                    input: mysql
-                }
+                // terminate: core.#Stop & {
+                //     _deps: gradle.success
+                //     input: mysql
+                // }
             }
             gradle: #GradleRun & {
                 src: _input.output
