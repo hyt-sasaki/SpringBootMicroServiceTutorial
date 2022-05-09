@@ -14,4 +14,4 @@ jobs:
           version: 0.2.9
           workdir: ./dagger
           cmds: |
-            do test --log-format=plain --log-level=debug
+            do build --log-format=plain --log-level=debug
