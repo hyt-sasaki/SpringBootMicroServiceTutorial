@@ -1,1 +1,1 @@
-module: ""
+module: "com.example.dagger"
