@@ -19,7 +19,8 @@ dagger.#Plan & {
 	}
 	client: filesystem: {
         "..": read: contents: dagger.#FS
-        "./_build": write: contents: actions.build.contents.output
+        "./_build/jar": write: contents: actions.build.jar.output
+        "./_build/openapi": write: contents: actions.build.openapi.output
     }
 	client: network: "unix:///var/run/docker.sock": connect: dagger.#Socket
 
@@ -31,26 +32,20 @@ dagger.#Plan & {
                 contents: client.filesystem."..".read.contents
                 dest: "/src"
             }
-            mkdir: core.#Mkdir & {
-                input: load.output
-                path: "/src/appApiSchema/build"
-            }
-            openapi: core.#Exec & {
-                input: mkdir.output
-                env: _image.config.env
-                workdir: "/src/appApiSchema"
-                args: ["cue", "export", "-o", "/src/appApiSchema/build/openapi.yaml", "-f"]
-            }
             gradle: core.#Exec & {
-                input: openapi.output
-                env: openapi.env
+                input: load.output
+                env: _image.config.env
                 workdir: "/src"
                 args: ["./gradlew", ":app:bootJar"]
                 mounts: _gradleCacheMount
             }
-            contents: core.#Subdir & {
+            jar: core.#Subdir & {
                 input: gradle.output
-                path: "/src/app/build/libs/"
+                path: "/src/app/build/libs"
+            }
+            openapi: core.#Subdir & {
+                input: gradle.output
+                path: "/src/appApiSchema/build"
             }
         }
         push: {
