@@ -3,6 +3,7 @@ package main
 import (
 	"dagger.io/dagger"
 	"dagger.io/dagger/core"
+	"com.example.dagger/images:image"
 )
 
 dagger.#Plan & {
@@ -18,29 +19,34 @@ dagger.#Plan & {
         "./_build": write: contents: actions.build.contents.output
     }
     actions: {
-        openapi: {
-            cue: #CueRun & {
-                src: client.filesystem."..".read.contents
-                script: #"""
-                mkdir -p /src/appApiSchema/build
-                cue export -o /src/appApiSchema/build/openapi.yaml
-                """#
+        build: {
+            _image: image.#Image
+            load: core.#Copy & {
+                input: _image.rootfs
+                contents: client.filesystem."..".read.contents
+                dest: "/src"
             }
-        }
-		build: {
-            _input: core.#Subdir & {
-                input: openapi.cue.output.rootfs
-                path: "/src"
+            mkdir: core.#Mkdir & {
+                input: load.output
+                path: "/src/appApiSchema/build"
             }
-            gradle: #GradleRun & {
-                src: _input.output
-                arguments: [":app:bootJar"]
-                always: false
+            openapi: core.#Exec & {
+                input: mkdir.output
+                env: _image.config.env
+                workdir: "/src/appApiSchema"
+                args: ["cue", "export", "-o", "/src/appApiSchema/build/openapi.yaml", "-f"]
+            }
+            gradle: core.#Exec & {
+                input: openapi.output
+                env: openapi.env
+                workdir: "/src"
+                args: ["./gradlew", ":app:bootJar"]
+                mounts: _gradleCacheMount
             }
             contents: core.#Subdir & {
-                input: gradle.output.rootfs
+                input: gradle.output
                 path: "/src/app/build"
             }
-		}
+        }
 	}
 }
