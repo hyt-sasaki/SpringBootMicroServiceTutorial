@@ -3,11 +3,14 @@ package main
 import (
 	"dagger.io/dagger"
 	"dagger.io/dagger/core"
+	"universe.dagger.io/docker"
+	"universe.dagger.io/docker/cli"
 	"com.example.dagger/images:image"
+	"com.example.dagger/images/java"
 )
 
 dagger.#Plan & {
-	_gardleCacheMount: "/root/.gradle": {
+	_gradleCacheMount: "/root/.gradle": {
 		dest: "/root/.gradle"
 		type: "cache"
 		contents: core.#CacheDir & {
@@ -18,6 +21,8 @@ dagger.#Plan & {
         "..": read: contents: dagger.#FS
         "./_build": write: contents: actions.build.contents.output
     }
+	client: network: "unix:///var/run/docker.sock": connect: dagger.#Socket
+
     actions: {
         build: {
             _image: image.#Image
@@ -45,7 +50,28 @@ dagger.#Plan & {
             }
             contents: core.#Subdir & {
                 input: gradle.output
-                path: "/src/app/build"
+                path: "/src/app/build/libs/"
+            }
+        }
+        push: {
+            _image: java.#Image
+            copy: core.#Copy & {
+                input: _image.rootfs
+                contents: build.contents.output
+                dest: "/root"
+            }
+            // TODO: AWS ECRへのpushに置き換える
+            load: cli.#Load & {
+                image: docker.#Image & {
+                    rootfs: copy.output
+                    config: core.#ImageConfig & {
+                        env: _image.config.env
+                        entrypoint: ["java"]
+                        cmd: ["-jar", "/root/app-1.0.jar"]
+                    }
+                }
+                host: client.network."unix:///var/run/docker.sock".connect
+                tag: "java-app:load"
             }
         }
 	}
