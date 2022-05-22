@@ -1,4 +1,4 @@
-name: dagger-test
+name: dagger-build
 
 on:
   workflow_dispatch:
@@ -6,12 +6,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::146161350821:role/ecr_login_role
+          aws-region: ap-northeast-1
       - uses: dagger/dagger-for-github@v3
         with:
           version: 0.2.10
           workdir: ./dagger
           cmds: |
-            do push --log-format=plain
+            do push --log-format=plain --log-level=debug
