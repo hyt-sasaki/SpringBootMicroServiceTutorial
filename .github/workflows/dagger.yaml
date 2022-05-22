@@ -22,4 +22,4 @@ jobs:
           version: 0.2.10
           workdir: ./dagger
           cmds: |
-            do push --log-format=plain --log-level=debug
+            do push --log-format=plain
