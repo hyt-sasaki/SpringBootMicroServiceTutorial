@@ -1,7 +1,7 @@
 name: dagger-test
 
 on:
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,4 +14,4 @@ jobs:
           version: 0.2.9
           workdir: ./dagger
           cmds: |
-            do build --log-format=plain --log-level=debug
+            do push --log-format=plain
