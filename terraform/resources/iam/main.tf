@@ -18,25 +18,11 @@ resource "aws_iam_role" "ecr_login_role" {
 }
 
 data "aws_iam_policy_document" "assume_policy" {
-  // localからのassume role
   statement {
     actions = ["sts:AssumeRole"]
     principals {
       type        = "AWS"
-      identifiers = [local.dev_user_role_arn]
-    }
-  }
-  // ghaからのassume role
-  statement {
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-    principals {
-      type        = "Federated"
-      identifiers = [data.terraform_remote_state.oidc.outputs.arn]
-    }
-    condition {
-      test     = "StringLike"
-      variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:hyt-sasaki/SpringBootMicroServiceTutorial:*"]
+      identifiers = [local.dev_user_role_arn, aws_iam_role.gha.arn]
     }
   }
 }
@@ -63,5 +49,26 @@ data "aws_iam_policy_document" "ecr_policy" {
       "ecr:PutImage"
     ]
     resources = [data.terraform_remote_state.ecr.outputs.ecr_repository_arn]
+  }
+}
+
+
+resource "aws_iam_role" "gha" {
+  name               = "gha_role"
+  assume_role_policy = data.aws_iam_policy_document.gha_assume_policy.json
+}
+
+data "aws_iam_policy_document" "gha_assume_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = [data.terraform_remote_state.oidc.outputs.arn]
+    }
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:hyt-sasaki/SpringBootMicroServiceTutorial:*"]
+    }
   }
 }
