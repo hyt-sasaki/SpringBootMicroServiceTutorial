@@ -12,10 +12,9 @@ import (
 		format:  "json"
 		"input": input
 	}
-	_credential: _awsSecrets.output.Credentials
 	credentials: aws.#Credentials & {
-		accessKeyId:     _credential.AccessKeyId.contents
-		secretAccessKey: _credential.SecretAccessKey.contents
-		sessionToken:    _credential.SessionToken.contents
+		accessKeyId:     _awsSecrets.output.Credentials.AccessKeyId.contents
+		secretAccessKey: _awsSecrets.output.Credentials.SecretAccessKey.contents
+		sessionToken:    _awsSecrets.output.Credentials.SessionToken.contents
 	}
 }
